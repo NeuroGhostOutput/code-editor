@@ -4,6 +4,8 @@ import CodeEditor from "@/components/CodeEditor";
 import LanguageSelector from "@/components/LanguageSelector";
 import OutputWindow from "@/components/OutputWindow";
 import TaskDescription from "@/components/TaskDescription";
+import ResourceMonitor from "@/components/ResourceMonitor";
+import ThemeSwitcher from "@/components/ThemeSwitcher";
 import { useEditorStore } from "@/store/editorStore";
 
 export default function Home() {
@@ -22,14 +24,14 @@ export default function Home() {
       });
 
       const data = await response.json();
-
+      
       if (data.status === "success") {
-        setOutput(data.output);
+        setOutput(`${data.output}\n\nУспех: 200 OK`);
       } else {
-        setOutput(data.error);
+        setOutput(`${data.error}\n\nОшибка: ${response.status}`);
       }
     } catch (error) {
-      setOutput("Произошла ошибка при выполнении кода");
+      setOutput("Произошла ошибка при выполнении кода\n\nОшибка: 500");
       console.error("Error executing code:", error);
     } finally {
       setLoading(false);
@@ -37,38 +39,52 @@ export default function Home() {
   };
 
   return (
-    <main className="container mx-auto px-4 py-8 max-w-6xl grid-cols-2">
-      <h1 className="text-3xl font-bold mb-8">Онлайн редактор кода</h1>
+    <div className="flex flex-col h-full bg-[var(--bg-primary)]">
+      {/* Верхняя панель */}
+      <div className="h-12 bg-[var(--bg-secondary)] border-b border-[var(--border-color)] flex items-center px-4">
+        <div className="text-[var(--text-primary)] text-lg font-medium">
+          Онлайн редактор кода
+        </div>
+      </div>
 
-      <div className="space-y-6 row-auto">
-        <TaskDescription  />
-
-        <div className="flex justify-between items-center">
+      {/* Панель управления */}
+      <div className="h-12 bg-[var(--bg-secondary)] border-b border-[var(--border-color)] flex items-center justify-center">
+        <div className="bg-[var(--bg-primary)] rounded-full px-2 py-1 flex items-center space-x-6">
           <LanguageSelector />
+          <div className="w-px h-6 bg-[var(--border-color)]"></div>
+          <ThemeSwitcher />
+          <div className="w-px h-6 bg-[var(--border-color)]"></div>
           <button
             onClick={() => {
               const code = useEditorStore.getState().code;
               const language = useEditorStore.getState().language;
               executeCode(code, language);
             }}
-            className="px-4 py-2 bg-blue-500 text-white rounded-md hover:bg-blue-600 transition-colors flex items-center gap-2"
+            className="px-4 py-1.5 bg-[#3e8e41] hover:bg-[#4caf50] text-white rounded-full text-sm transition-colors"
           >
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              width="24"
-              height="24"
-              viewBox="0 0 24 24"
-              fill="currentColor"
-            >
-              <path d="M8 5v14l11-7z" />
-            </svg>
-            Выполнить код
+            Run
           </button>
         </div>
-
-        <CodeEditor />
-        <OutputWindow />
       </div>
-    </main>
+
+      {/* Основной контент */}
+      <div className="flex flex-1 min-h-0">
+        {/* Левая панель с описанием */}
+        <div className="w-[45%] border-r border-[var(--border-color)] overflow-y-auto">
+          <TaskDescription />
+        </div>
+
+        {/* Правая панель с редактором и выводом */}
+        <div className="flex-1 flex flex-col min-h-0">
+          <div className="flex-1 min-h-0">
+            <CodeEditor />
+          </div>
+          <ResourceMonitor />
+          <div className="h-[200px] border-t border-[var(--border-color)]">
+            <OutputWindow />
+          </div>
+        </div>
+      </div>
+    </div>
   );
 }

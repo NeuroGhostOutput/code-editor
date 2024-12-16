@@ -3,19 +3,143 @@
 @tailwind utilities;
 
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
+  --foreground-rgb: 0, 0, 0;
+  --background-start-rgb: 214, 219, 220;
+  --background-end-rgb: 255, 255, 255;
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
+/* Темная тема по умолчанию */
+:root {
+  --bg-primary: #1e1e1e;
+  --bg-secondary: #2d2d2d;
+  --border-color: #3d3d3d;
+  --text-primary: #ffffff;
+  --text-secondary: #d4d4d4;
+  --text-muted: #858585;
 }
 
+/* Светлая тема */
+:root[class~="light-theme"] {
+  --bg-primary: #ffffff;
+  --bg-secondary: #f5f5f5;
+  --border-color: #e5e5e5;
+  --text-primary: #000000;
+  --text-secondary: #333333;
+  --text-muted: #666666;
+}
+
+/* Плавные переходы для смены темы */
+* {
+  transition: background-color 0.3s ease, border-color 0.3s ease, color 0.3s ease;
+}
+
+/* Базовые стили */
 body {
-  color: var(--foreground);
-  background: var(--background);
-  font-family: Arial, Helvetica, sans-serif;
+  background-color: var(--bg-primary);
+  color: var(--text-primary);
+}
+
+/* Стили для редактора Monaco */
+.monaco-editor {
+  transition: none !important;
+}
+
+/* Стили для прокрутки */
+::-webkit-scrollbar {
+  width: 12px;
+  height: 12px;
+}
+
+::-webkit-scrollbar-track {
+  background: var(--bg-secondary);
+}
+
+::-webkit-scrollbar-thumb {
+  background: var(--border-color);
+  border-radius: 6px;
+  border: 3px solid var(--bg-secondary);
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: var(--text-muted);
+}
+
+/* Стили для prose в светлой теме */
+.light-theme .prose {
+  --tw-prose-body: var(--text-secondary);
+  --tw-prose-headings: var(--text-primary);
+  --tw-prose-links: #2563eb;
+  --tw-prose-bold: var(--text-primary);
+  --tw-prose-counters: var(--text-muted);
+  --tw-prose-bullets: var(--text-muted);
+  --tw-prose-quotes: var(--text-primary);
+  --tw-prose-code: var(--text-primary);
+  --tw-prose-pre-code: var(--text-secondary);
+  --tw-prose-pre-bg: var(--bg-secondary);
+}
+
+/* Стили для prose в темной теме */
+.prose {
+  --tw-prose-body: var(--text-secondary);
+  --tw-prose-headings: var(--text-primary);
+  --tw-prose-links: #60a5fa;
+  --tw-prose-bold: var(--text-primary);
+  --tw-prose-counters: var(--text-muted);
+  --tw-prose-bullets: var(--text-muted);
+  --tw-prose-quotes: var(--text-primary);
+  --tw-prose-code: var(--text-primary);
+  --tw-prose-pre-code: var(--text-secondary);
+  --tw-prose-pre-bg: var(--bg-secondary);
+}
+
+/* Принудительное применение темы для Monaco Editor */
+.light-theme .monaco-editor,
+.light-theme .monaco-editor .margin,
+.light-theme .monaco-editor-background,
+.light-theme .monaco-editor .inputarea.ime-input {
+  background-color: #ffffff !important;
+}
+
+.dark-theme .monaco-editor,
+.dark-theme .monaco-editor .margin,
+.dark-theme .monaco-editor-background,
+.dark-theme .monaco-editor .inputarea.ime-input {
+  background-color: #1e1e1e !important;
+}
+
+/* Стили для редактора в светлой теме */
+.light-theme .monaco-editor {
+  --vscode-editor-background: #ffffff;
+  --vscode-editor-foreground: #000000;
+  --vscode-editorLineNumber-foreground: #237893;
+  --vscode-editor-lineHighlightBackground: #f5f5f5;
+  --vscode-editor-lineHighlightBorder: #e5e5e5;
+  --vscode-editorCursor-foreground: #000000;
+  --vscode-editor-selectionBackground: #add6ff;
+  --vscode-editor-inactiveSelectionBackground: #e5ebf1;
+  --vscode-editorWhitespace-foreground: #d4d4d4;
+  --vscode-editorIndentGuide-background: #d4d4d4;
+}
+
+/* Стили для редактора в темной теме */
+.dark-theme .monaco-editor {
+  --vscode-editor-background: #1e1e1e;
+  --vscode-editor-foreground: #d4d4d4;
+  --vscode-editorLineNumber-foreground: #858585;
+  --vscode-editor-lineHighlightBackground: #2d2d2d;
+  --vscode-editor-lineHighlightBorder: #3d3d3d;
+  --vscode-editorCursor-foreground: #d4d4d4;
+  --vscode-editor-selectionBackground: #264f78;
+  --vscode-editor-inactiveSelectionBackground: #3a3d41;
+  --vscode-editorWhitespace-foreground: #3d3d3d;
+  --vscode-editorIndentGuide-background: #404040;
+}
+
+/* Стили для высоты редактора */
+.monaco-editor {
+  min-height: 100% !important;
+}
+
+.monaco-editor .overflow-guard {
+  height: 100% !important;
 }
